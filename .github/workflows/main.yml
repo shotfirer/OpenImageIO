@@ -1,0 +1,35 @@
+name: Build OpenImageIO
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: # allows manual runs
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y cmake build-essential libboost-all-dev libopencv-dev libtiff-dev libjpeg-dev libpng-dev libopenexr-dev
+
+      - name: Configure Project
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+
+      - name: Build Project
+        run: |
+          cd build
+          make -j$(nproc)
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: OpenImageIO-build
+          path: build/
