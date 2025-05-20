@@ -17,7 +17,7 @@ jobs:
         run: |
           git clone https://github.com/microsoft/vcpkg.git
           .\vcpkg\bootstrap-vcpkg.bat
-          .\vcpkg\vcpkg.exe install boost zlib libjpeg-turbo libpng tiff openexr opencv fmt robin-map pugixml pybind11
+          .\vcpkg\vcpkg.exe install boost zlib libjpeg-turbo libpng tiff openexr opencv fmt robin-map pugixml pybind11 libjxl libheif freetype opencolorio
           echo "VCPKG_ROOT=$pwd\vcpkg" >> $env:GITHUB_ENV
 
       - name: Configure CMake
@@ -27,7 +27,13 @@ jobs:
           cmake .. -G "Visual Studio 17 2022" `
             -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" `
             -DOIIO_BUILD_TESTS=OFF `
-            -DBUILD_SHARED_LIBS=ON
+            -DBUILD_SHARED_LIBS=ON `
+            -DUSE_PYTHON=OFF `
+            -DUSE_JPEGXL=ON `
+            -DUSE_LIBHEIF=ON `
+            -DUSE_FREETYPE=ON `
+            -DUSE_OCIO=ON
+            -DOpenImageIO_BUILD_MISSING_DEPS=all
 
       - name: Build with MSBuild
         run: |
