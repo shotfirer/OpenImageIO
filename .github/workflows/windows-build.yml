@@ -17,7 +17,7 @@ jobs:
         run: |
           git clone https://github.com/microsoft/vcpkg.git
           .\vcpkg\bootstrap-vcpkg.bat
-          .\vcpkg\vcpkg.exe install boost zlib libjpeg-turbo libpng tiff openexr opencv fmt robin-map pugixml pybind11 libjxl libheif freetype opencolorio
+          .\vcpkg\vcpkg.exe install boost zlib libjpeg-turbo libpng tiff openexr opencv fmt robin-map pugixml pybind11 libjxl libheif freetype opencolorio opencv tbb ffmpeg giflib libraw openjpeg qtbase
           echo "VCPKG_ROOT=$pwd\vcpkg" >> $env:GITHUB_ENV
 
       - name: Configure CMake
@@ -32,7 +32,12 @@ jobs:
             -DUSE_JPEGXL=ON `
             -DUSE_LIBHEIF=ON `
             -DUSE_FREETYPE=ON `
-            -DUSE_OCIO=ON
+            -DUSE_OCIO=ON `
+            -DUSE_OPENCV=ON `
+            -DUSE_FFMPEG=ON `
+            -DUSE_GIF=ON `
+            -DUSE_LIBRAW=ON `
+            -DUSE_OPENJPEG=ON `
             -DOpenImageIO_BUILD_MISSING_DEPS=all
 
       - name: Build with MSBuild
